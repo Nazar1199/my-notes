@@ -1,11 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--dark);
+  
+  --dark: #0A1F38;
+  --dark-middle: #1B2F46;
+  --dark-light: #2F4056;
+  --gray: #9DA5AF;
+  --green-dark: #819400;
+  --green-middle: #97AB0D;
+  --green: #A5BB0C;
+  --green-light: #B1C909;
+  --white: #FFFFFF;
+  --error-text: #FF7461;
+  --error-background: #FF74611A;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--white);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,11 +25,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--green-light);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--white);
 }
 
 body {
