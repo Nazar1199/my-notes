@@ -4,6 +4,7 @@
   background-color: var(--dark);
   
   --dark: #0A1F38;
+  --dark-overlay: #0A1F38B0;
   --dark-middle: #1B2F46;
   --dark-light: #2F4056;
   --gray: #9DA5AF;

@@ -1,18 +1,20 @@
 <template>
-  <div class="label-container">
-    <span class="label">{{localLabel}}</span>
-  </div>
-  <div class="input-container">
-    <input :placeholder=localPlaceholder :value="localValue" @input="updateValue" />
-    <!-- <input class="passwordField" v-if="showPassword" placeholder="SampleText" :value="localValue" @input="updateValue" />
-    <input class="passwordField" v-if="!showPassword" placeholder="SampleText" :value="hiddenPassword" @input="updateHiddenValue" />
-    <MyButton id="togglePassword" 
-      :iconName="showPassword? IconNames.OffPassword : IconNames.OnPassword" 
-      :onClick="togglePassword"/> -->
-  </div>
-  <div class="subtext-container">
-    <span class="error-message">Error</span>
-  <span v-if="localMaxLenght != 0" class="lenght-message">{{ localValue.length }}/{{localMaxLenght}}</span>
+  <div class="inputbox-container">
+    <div class="label-container">
+      <span class="label">{{localLabel}}</span>
+    </div>
+    <div class="input-container">
+      <input :placeholder=localPlaceholder :value="localValue" @input="updateValue" />
+      <!-- <input class="passwordField" v-if="showPassword" placeholder="SampleText" :value="localValue" @input="updateValue" />
+      <input class="passwordField" v-if="!showPassword" placeholder="SampleText" :value="hiddenPassword" @input="updateHiddenValue" />
+      <MyButton id="togglePassword" 
+        :iconName="showPassword? IconNames.OffPassword : IconNames.OnPassword" 
+        :onClick="togglePassword"/> -->
+    </div>
+    <div class="subtext-container">
+      <span class="error-message">{{ localErrorMessage }}</span>
+    <span v-if="localMaxLenght != 0" class="lenght-message">{{ localValue.length }}/{{localMaxLenght}}</span>
+    </div>
   </div>
 </template>
 
@@ -33,9 +35,10 @@ const emit = defineEmits(["input"]);
 
 const showPassword = ref(false);
 const localLabel = ref(props.label || "Лейбл");
+const localErrorMessage = ref("");
 const localValue = ref(props.value || "");
 const localPlaceholder = ref(props.placeholder || "Подсказка");
-const localMaxLenght = ref(props.maxLenght || 100);
+const localMaxLenght = ref(props.maxLenght || 10);
 const localDisabled = ref(props.disabled || false);
 const hiddenPassword = ref('*'.repeat(localValue.length) || "")
 watch(
@@ -82,6 +85,8 @@ const updateValue = (event) => {
 <style lang="scss">
 .input-container {
   position: relative;
+    display: flex;
+    flex-direction: column;
 }
 #togglePassword {
   position: absolute;
@@ -101,8 +106,6 @@ input {
   font-size: 18px;
   padding-left: 28px;
   padding-right: 28px;
-  margin-top: 8px;
-  margin-bottom: 8px;
   &:hover {
     outline: none;
     border: 2px;
@@ -126,6 +129,7 @@ input {
   height: 28px;
   padding-right: 24px;
   padding-left: 24px;
+  margin-bottom: 8px;
   .label {
     color: var(--gray);
   }
@@ -135,6 +139,7 @@ input {
   justify-content: space-between;
   align-items: center;
   height: 28px;
+  margin-top: 8px;
   padding-right: 24px;
   padding-left: 24px;
   .error-message {

@@ -1,6 +1,7 @@
 <template>
     <div>
         <MyInputBox/>
+        <LoginDialog></LoginDialog>
       <!-- <Note
         v-for="(note, index) in notes"
         :key="index"
@@ -16,6 +17,8 @@
   import { ref } from "vue";
   import Note from "../components/Note.vue";
   import MyButton from "../components/UI/MyButton.vue";
+import MyDialog from "../components/UI/MyDialog.vue";
+import LoginDialog from "../components/LoginDialog.vue";
   
   const notes = ref([
     { title: "Заметка 1", text: "Текст заметки 1" },
