@@ -13,13 +13,18 @@
         </div>
       </template>
       <template #bottom>
-        <div class="bottom">
-            <div class="registration-container">
-                <p class="text-small">У вас нет аккаунта?</p>
-                <a class="text-small-bold">Зарегистрируйтесь</a>
+        <div >
+            <div class="bottom">
+                <div class="registration-container">
+                    <p class="text-small">У вас нет аккаунта?</p>
+                    <a class="text-small-bold">Зарегистрируйтесь</a>
+                </div>
+                <MyButton :click="closeLoginDialog" label="Войти"/>
             </div>
-            <MyButton :click="closeLoginDialog" label="Войти"/>
-        </div>
+            <div id="errors-block">
+                <p id="errors-text" class="text-small">{{ errorMessage }}</p>
+            </div>
+        </div>                
       </template>
     </MyDialog>
   </template>
@@ -28,6 +33,8 @@
   import { ref } from "vue";
   
   const showDialog = ref(false);
+  const errorMessage = ref("Пользователь с таким логином не найден");
+//   const errorMessage = ref("");
   
   const openLoginDialog = () => {
     console.log("Open login");
@@ -41,6 +48,18 @@
   </script>
 
 <style lang="scss">
+    #errors-text {
+        color: var(--error-text)
+    }
+    #errors-block {
+        margin-top: 20px;
+        background-color: var(--error-background);
+        border-radius: 24px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
     .header{
         display: flex;
     }
