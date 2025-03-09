@@ -57,8 +57,10 @@
       margin: 4px;
       border-radius: 40px;
       width: 100%;
+      height: -webkit-fill-available;
       max-width: 780px;
       position: relative;
+      align-content: center;
       .content-container {
         margin-top: 28px;
         margin-bottom: 28px;
@@ -79,33 +81,31 @@
       z-index: 10;
     }
   
-  @media (min-width: 768px) {
-      .close-button-container {
-          top: 20px;
-          right: 20px;
-      }
-      .dialog-container {
-      padding: 56px;
-      }
-      .dialog-container {
-        width: 696px;
-        margin-top: 4px;
-        margin-bottom: 4px;
-        margin-left: 40px;
-        margin-right: 40px;
-      }
-  }
-  
-    @media (min-width: 1024px) {
-      .dialog-container {
-        width: 50%;
-      }
+    @media (min-width: 768px) {
+        .close-button-container {
+            top: 20px;
+            right: 20px;
+        }
+        .dialog-container {
+            padding: 56px;
+            width: 576px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            margin: 4px;
+            height: min-content;
+        }
     }
   
-  @media (min-width: 1366px) {
-      .dialog-container {
-      padding: 80px;
-      }
-  }
+    @media (min-width: 1366px) {
+        .dialog-container {
+            width: 482px;
+        }
+    }
+    @media (min-width: 1900px) {
+        .dialog-container {
+            width: 620px;
+            padding: 80px;
+        }
+    }
   }
   </style>

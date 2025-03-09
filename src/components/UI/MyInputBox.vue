@@ -11,9 +11,9 @@
         :iconName="showPassword? IconNames.OffPassword : IconNames.OnPassword" 
         :onClick="togglePassword"/> -->
     </div>
-    <div class="subtext-container">
+    <div v-if="localShowErrors == true || localMaxLenght != 0" class="subtext-container">
       <span class="error-message">{{ localErrorMessage }}</span>
-    <span v-if="localMaxLenght != 0" class="lenght-message">{{ localValue.length }}/{{localMaxLenght}}</span>
+      <span v-if="localMaxLenght != 0" class="lenght-message">{{ localValue.length }}/{{localMaxLenght}}</span>
     </div>
   </div>
 </template>
@@ -29,16 +29,18 @@ const props = defineProps({
   placeholder: String,
   maxLenght: Number,
   disabled: Boolean,
+  showErrors: Boolean,
 });
 
 const emit = defineEmits(["input"]);
 
 const showPassword = ref(false);
-const localLabel = ref(props.label || "Лейбл");
+const localLabel = ref(props.label || "Поле ввода");
 const localErrorMessage = ref("");
 const localValue = ref(props.value || "");
-const localPlaceholder = ref(props.placeholder || "Подсказка");
-const localMaxLenght = ref(props.maxLenght || 10);
+const localPlaceholder = ref(props.placeholder || "");
+const localMaxLenght = ref(props.maxLenght || 0);
+const localShowErrors = ref(props.showErrors || false);
 const localDisabled = ref(props.disabled || false);
 const hiddenPassword = ref('*'.repeat(localValue.length) || "")
 watch(
@@ -102,6 +104,7 @@ input {
   font-family: "Montserrat";
   border-radius: 36px;
   border: none;
+
   height: 72px;
   font-size: 18px;
   padding-left: 28px;
