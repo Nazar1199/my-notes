@@ -1,5 +1,6 @@
 import {AxiosError} from 'axios';
 import { api } from '.';
+import { saveTokenToLocalStorage, removeTokenFromLocalStorage } from '../localStorage';
 
 export async function loginUser(email: string, password: string) {
     try {
@@ -7,13 +8,14 @@ export async function loginUser(email: string, password: string) {
         email,
         password,
       });
-      console.log('Login successful:', response.data);
+      saveTokenToLocalStorage(response.data);
+      // console.log('Login successful:', response.data);
     } catch (error) {
         if (error instanceof AxiosError) {
-          // console.error('Login failed:', error.response?.data || error.message);
+          console.error('Login failed:', error.response?.data || error.message);
           throw error.response?.data || error.message;
         } else {
-          // console.error('Login failed:', (error as Error).message || error);
+          console.error('Login failed:', (error as Error).message || error);
           throw (error as Error).message || error;
         }
     }
@@ -43,6 +45,7 @@ export async function logoutUser(accessToken: string) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    removeTokenFromLocalStorage();
     console.log('Logout successful');
   } catch (error) {
     if (error instanceof AxiosError) {

@@ -1,21 +1,29 @@
 <template>
-    <header class="header">
-      <div id="header-content">
-        <div class="logo">
-          <img src="/public/resources/icons/logo.svg" alt="Логотип" />
-        </div>
-        <MyButton class="button" @click="handleClick" :iconName="$IconNames.Login" label="Вход"/>
+  <header class="header">
+    <div id="header-content">
+      <div class="logo">
+        <img src="/public/resources/icons/logo.svg" alt="Логотип" />
       </div>
-    </header>
-  </template>
-  
-  <script setup lang="ts">
-import MyButton from './UI/MyButton.vue';
+      <MyButton
+        class="button"
+        :onClick="openLoginDialog"
+        :iconName="$IconNames.Login"
+        :iconSize="$IconSizes.Large"
+        label="Вход"
+      />
+    </div>
+  </header>
+</template>
 
-  const handleClick = () => {
-    console.log('Кнопка нажата');
-  };
-  </script>
+<script setup lang="ts">
+import { inject } from 'vue';
+
+const showLoginDialog = inject('showLoginDialog');
+
+const openLoginDialog = () => {
+  showLoginDialog.value = true;
+};
+</script>
   
   <style scoped>
   .header {

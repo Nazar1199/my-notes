@@ -1,6 +1,5 @@
 <template>
-    <MyButton :onClick="openLoginDialog" label="Открыть диалог"/>
-    <MyDialog :visible="showDialog">
+    <MyDialog :visible="showRegistrationDialog" @close="closeRegistrationDialog">
       <template #header>
         <div class="header">
             <h2>Регистрация</h2>
@@ -21,9 +20,9 @@
                 label="Пароль" 
                 placeholder="Введите пароль"/>
             <MyInputBox 
-                id="passwordRepeat" 
-                :value="passwordRepeatValue" 
-                @input="passwordRepeatValue = $event"
+                id="passwordConfirm" 
+                :value="passwordConfirmValue" 
+                @input="passwordConfirmValue = $event"
                 label="Пароль ещё раз" 
                 placeholder="Введите пароль"/>
         </div>
@@ -33,9 +32,9 @@
             <div class="bottom">
                 <div class="registration-container">
                     <p class="text-small">У вас есть аккаунт?</p>
-                    <a class="text-small-bold">Войдите</a>
+                    <a class="text-small-bold" @click="openLoginDialog">Войдите</a>
                 </div>
-                <MyButton :onclick="login" label="Зарегистрироваться"/>
+                <MyButton :onclick="registration" label="Зарегистрироваться"/>
             </div>
             <div v-if="errorMessage" id="errors-block">
                 <p id="errors-text" class="text-small">{{ errorMessage }}</p>
@@ -46,36 +45,48 @@
   </template>
   
   <script setup>
-  import { ref } from "vue";
-  import { loginUser } from "../api/auth";
+  import { ref, inject } from "vue";
+  import { registerUser } from "../api/index";
   
-  const showDialog = ref(false);
+  const showRegistrationDialog = inject('showRegistrationDialog');
+  const showLoginDialog = inject('showLoginDialog');
   const errorMessage = ref("");
   const loginValue = ref("");
   const passwordValue = ref("");
-  const passwordRepeatValue = ref("");
-  
-  const openLoginDialog = () => {
-    console.log("Open login");
-    showDialog.value = true;
-    console.log(showDialog.value);
-  };
-  
-  const login = async () => {
+  const passwordConfirmValue = ref("");
+    
+  const registration = async () => {
   try {
-    await loginUser(loginValue.value, passwordValue.value);
-    errorMessage.value = "";
+    await registerUser(
+        loginValue.value, 
+        passwordValue.value, 
+        passwordConfirmValue.value
+    );
+    closeRegistrationDialog();
   } catch (error) {
     errorMessage.value = String(error.message);
   }
 };
 
-  const closeLoginDialog = () => {
-    showDialog.value = false;
+const clearForm = () => {
+    errorMessage.value = "";
+    loginValue.value = "";
+    passwordValue.value = "";
+    passwordConfirmValue.value = "";
+  }
+
+  const openLoginDialog = () => {
+    showLoginDialog.value = true;
+    closeRegistrationDialog();
+  };
+
+  const closeRegistrationDialog = () => {
+    showRegistrationDialog.value = false;
+    clearForm();
   };
   </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     #errors-text {
         color: var(--error-text)
     }

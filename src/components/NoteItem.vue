@@ -44,6 +44,7 @@
   }
   .note {
     position:relative;
+    overflow: hidden;
     display: block;
     width: 100%;
     padding: 0px;
@@ -61,6 +62,18 @@
         margin-left: 28px;
       }
     }
+    .note:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-width: 0 24px 24px 0; /* Увеличен размер */
+    border-style: solid;
+    border-color: #fff #fff #333 #333; /* Изменен цвет */
+    background: #333; /* Изменен цвет */
+    display: block;
+    width: 0;
+  }
     .note-content {
       border-color: var(--green);
       border-width: 1px;

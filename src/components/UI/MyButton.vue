@@ -6,7 +6,9 @@
         :disabled="localDisabled">
       <img v-if="localIconName" 
         :src="MyUiIcons.getIconPath(localIconName)"
-        :class="{ 'with-text': localLabel }" />
+        :class="{ 'with-text': localLabel }"
+        :style="localIconSize == IconSizes.Large ? { width: '32px', height: '32px' } : null"
+        />
       <span v-if="localLabel">{{ localLabel }}</span>
     </button>
   </template>
@@ -30,6 +32,7 @@
   
   const localLabel = ref(props.label || "");
   const localIconName = ref(props.iconName || "");
+  const localIconSize = ref(props.iconSize || IconSizes.Normal);
   const localDisabled = ref(props.disabled || false);
   
   watch(

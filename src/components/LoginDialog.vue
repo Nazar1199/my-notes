@@ -1,6 +1,5 @@
 <template>
-    <MyButton :onClick="openLoginDialog" label="Открыть диалог"/>
-    <MyDialog :visible="showDialog">
+    <MyDialog :visible="showLoginDialog" @close="closeLoginDialog">
       <template #header>
         <div class="header">
             <h2>Вход в ваш аккаунт</h2>
@@ -27,7 +26,7 @@
             <div class="bottom">
                 <div class="registration-container">
                     <p class="text-small">У вас нет аккаунта?</p>
-                    <a class="text-small-bold">Зарегистрируйтесь</a>
+                    <a class="text-small-bold" @click="openRegistrationDialog">Зарегистрируйтесь</a>
                 </div>
                 <MyButton :onclick="login" label="Войти"/>
             </div>
@@ -40,35 +39,43 @@
   </template>
   
   <script setup>
-  import { ref } from "vue";
+  import { ref, inject } from "vue";
   import { loginUser } from "../api/auth";
-  
-  const showDialog = ref(false);
+
+  const showLoginDialog = inject('showLoginDialog');
+  const showRegistrationDialog = inject('showRegistrationDialog');
   const errorMessage = ref("");
   const loginValue = ref("");
   const passwordValue = ref("");
-  
-  const openLoginDialog = () => {
-    console.log("Open login");
-    showDialog.value = true;
-    console.log(showDialog.value);
-  };
   
   const login = async () => {
   try {
     await loginUser(loginValue.value, passwordValue.value);
     errorMessage.value = "";
+    closeLoginDialog();
   } catch (error) {
     errorMessage.value = String(error.message);
   }
 };
 
+  const clearForm = () => {
+    errorMessage.value = "";
+    loginValue.value = "";
+    passwordValue.value = "";
+  }
+
+    const openRegistrationDialog = () => {
+    showRegistrationDialog.value = true;
+    closeLoginDialog();
+    };
+
   const closeLoginDialog = () => {
-    showDialog.value = false;
+    showLoginDialog.value = false;
+    clearForm();
   };
   </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     #errors-text {
         color: var(--error-text)
     }

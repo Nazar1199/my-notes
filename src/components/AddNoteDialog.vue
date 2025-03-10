@@ -1,7 +1,6 @@
 <template>
-    <MyButton :onClick="openLoginDialog" label="Открыть диалог"/>
-    <MyDialog :visible="showDialog">
-      <template #header>
+    <MyDialog :visible="showAddNoteDialog" @close="closeAddNoteDialog">
+        <template #header>
         <div class="header">
             <h2>Добавление заметки</h2>
         </div>
@@ -27,7 +26,7 @@
       <template #bottom>
         <div >
             <div class="bottom">
-                <MyButton :onclick="login" label="Добавить"/>
+                <MyButton :onclick="addNewNote" label="Добавить"/>
             </div>
             <div v-if="errorMessage" id="errors-block">
                 <p id="errors-text" class="text-small">{{ errorMessage }}</p>
@@ -38,35 +37,41 @@
   </template>
   
   <script setup>
-  import { ref } from "vue";
-  import { loginUser } from "../api/auth";
+  import { ref, inject } from "vue";
+  import { createNote } from "../api/notes";
+  import { getTokenFromLocalStorage } from "../localStorage";
   
-  const showDialog = ref(false);
+  const showAddNoteDialog = inject('showAddNoteDialog');
   const errorMessage = ref("");
   const noteNameValue = ref("");
   const noteTextValue = ref("");
   
-  const openLoginDialog = () => {
-    console.log("Open login");
-    showDialog.value = true;
-    console.log(showDialog.value);
-  };
-  
-  const login = async () => {
+  const addNewNote = async () => {
   try {
-    await loginUser(noteNameValue.value, noteTextValue.value);
-    errorMessage.value = "";
+    await createNote(
+        getTokenFromLocalStorage(), 
+        noteNameValue.value, 
+        noteTextValue.value
+    );
+    closeAddNoteDialog();
   } catch (error) {
     errorMessage.value = String(error.message);
   }
 };
 
-  const closeLoginDialog = () => {
-    showDialog.value = false;
+const clearForm = () => {
+    errorMessage.value = "";
+    noteNameValue.value = "";
+    noteTextValue.value = "";
+  }
+
+  const closeAddNoteDialog = () => {
+    showLoginDialog.value = false;
+    clearForm();
   };
   </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     #errors-text {
         color: var(--error-text)
     }

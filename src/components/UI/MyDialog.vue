@@ -20,7 +20,8 @@
   <script setup>
   import { ref, watch } from "vue";
   import MyUiIcons, { IconNames, IconSizes } from "../UI/icons";
-  
+  const emit = defineEmits(['close']);
+
   const props = defineProps({
     visible: Boolean,
   });
@@ -28,8 +29,9 @@
   const localVisible = ref(props.visible || false);
   
   const closeDialog = () => {
-    localVisible.value = false;
-  };
+  emit('close');
+  localVisible.value = false;
+};
 
   watch(() => props.visible, (newValue) => {
     localVisible.value = newValue || false;
