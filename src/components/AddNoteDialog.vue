@@ -3,33 +3,31 @@
     <MyDialog :visible="showDialog">
       <template #header>
         <div class="header">
-            <h2>Вход в ваш аккаунт</h2>
+            <h2>Добавление заметки</h2>
         </div>
       </template>
       <template #content>
         <div class="content">
             <MyInputBox 
-                id="email" 
-                :value="loginValue" 
-                @input="loginValue = $event"
-                label="Email" 
-                placeholder="Введите Email"/>
-            <MyInputBox 
-                id="password" 
-                :value="passwordValue" 
-                @input="passwordValue = $event"
-                label="Пароль" 
-                placeholder="Введите пароль"/>
+                id="note-name" 
+                :value="noteNameValue" 
+                @input="noteNameValue = $event"
+                :maxLenght="100"
+                label="Название заметки" 
+                placeholder="Введите название"/>
+            <MyTextArea 
+                id="note-text" 
+                :value="noteTextValue" 
+                @textarea="noteTextValue = $event"
+                :maxLenght="500"
+                label="Текст заметки" 
+                placeholder="Введите текст"/>
         </div>
       </template>
       <template #bottom>
         <div >
             <div class="bottom">
-                <div class="registration-container">
-                    <p class="text-small">У вас нет аккаунта?</p>
-                    <a class="text-small-bold">Зарегистрируйтесь</a>
-                </div>
-                <MyButton :onclick="login" label="Войти"/>
+                <MyButton :onclick="login" label="Добавить"/>
             </div>
             <div v-if="errorMessage" id="errors-block">
                 <p id="errors-text" class="text-small">{{ errorMessage }}</p>
@@ -45,8 +43,8 @@
   
   const showDialog = ref(false);
   const errorMessage = ref("");
-  const loginValue = ref("");
-  const passwordValue = ref("");
+  const noteNameValue = ref("");
+  const noteTextValue = ref("");
   
   const openLoginDialog = () => {
     console.log("Open login");
@@ -56,7 +54,7 @@
   
   const login = async () => {
   try {
-    await loginUser(loginValue.value, passwordValue.value);
+    await loginUser(noteNameValue.value, noteTextValue.value);
     errorMessage.value = "";
   } catch (error) {
     errorMessage.value = String(error.message);
@@ -88,45 +86,18 @@
         display: flex;
         flex-direction: column-reverse;
     }
-    #email {
+    #note-name {
         margin-bottom: 16px;
-    }
-    .registration-container {
-        display: flex;
-        height: 24px;
-        justify-content: center;
-        align-items: center;
-        margin-top: 12px;
-        p {
-            color: var(--gray);
-            margin: 0px;
-            margin-right: 4px;
-        }
     }
     @media (min-width: 768px) {
         .bottom {
             display: flex;
-            flex-direction: row;
+            flex-direction: row-reverse;
             justify-content: space-between;
             align-items: center;
         }
-        #email {
+        #note-name {
             margin-bottom: 24px;
-        }
-        .registration-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 0px;
-        }
-    }
-    @media (min-width: 1366px) {
-        .registration-container {
-            flex-direction: column;
-        }
-    }
-    @media (min-width: 1900px) {
-        .registration-container {
-            flex-direction: row;
         }
     }
 </style>

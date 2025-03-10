@@ -44,9 +44,9 @@
   }
   .note {
     position:relative;
+    display: block;
+    width: 100%;
     padding: 0px;
-    margin-bottom: 20px;
-    margin-right: 20px;
     border-radius: 12px;
     background-color: var(--green-light);
     .note-header {
@@ -69,6 +69,7 @@
         p {
             font-size: 20px;
             margin: 0px;
+            text-align: left;
         }
     }
     .note-bottom {

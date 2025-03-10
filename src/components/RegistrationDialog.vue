@@ -3,7 +3,7 @@
     <MyDialog :visible="showDialog">
       <template #header>
         <div class="header">
-            <h2>Вход в ваш аккаунт</h2>
+            <h2>Регистрация</h2>
         </div>
       </template>
       <template #content>
@@ -20,16 +20,22 @@
                 @input="passwordValue = $event"
                 label="Пароль" 
                 placeholder="Введите пароль"/>
+            <MyInputBox 
+                id="passwordRepeat" 
+                :value="passwordRepeatValue" 
+                @input="passwordRepeatValue = $event"
+                label="Пароль ещё раз" 
+                placeholder="Введите пароль"/>
         </div>
       </template>
       <template #bottom>
         <div >
             <div class="bottom">
                 <div class="registration-container">
-                    <p class="text-small">У вас нет аккаунта?</p>
-                    <a class="text-small-bold">Зарегистрируйтесь</a>
+                    <p class="text-small">У вас есть аккаунт?</p>
+                    <a class="text-small-bold">Войдите</a>
                 </div>
-                <MyButton :onclick="login" label="Войти"/>
+                <MyButton :onclick="login" label="Зарегистрироваться"/>
             </div>
             <div v-if="errorMessage" id="errors-block">
                 <p id="errors-text" class="text-small">{{ errorMessage }}</p>
@@ -47,6 +53,7 @@
   const errorMessage = ref("");
   const loginValue = ref("");
   const passwordValue = ref("");
+  const passwordRepeatValue = ref("");
   
   const openLoginDialog = () => {
     console.log("Open login");
@@ -88,7 +95,7 @@
         display: flex;
         flex-direction: column-reverse;
     }
-    #email {
+    #email, #password {
         margin-bottom: 16px;
     }
     .registration-container {
@@ -110,7 +117,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        #email {
+        #email, #password {
             margin-bottom: 24px;
         }
         .registration-container {
@@ -122,6 +129,10 @@
     @media (min-width: 1366px) {
         .registration-container {
             flex-direction: column;
+            align-items: start;
+        }
+        p {
+            margin-right: 8px;
         }
     }
     @media (min-width: 1900px) {
