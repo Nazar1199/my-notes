@@ -1,32 +1,42 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue';
-import NotesTestPage from './pages/NotesTestPage.vue';
-import MyNotesPage from './pages/MyNotesPage.vue';
+import { ref, provide, onMounted } from 'vue';
 import HeaderComponent from './components/HeaderComponent.vue'
-import MainPage from './pages/MainPage.vue';
 import LoginDialog from './components/LoginDialog.vue';
 import RegistrationDialog from './components/RegistrationDialog.vue';
-import AddNoteDialog from './components/AddNoteDialog.vue';
 
 const showLoginDialog = ref(false);
 const showRegistrationDialog = ref(false);
 const showAddNoteDialog = ref(false);
+import { User } from './models/User';
+import { getUserInfoFromLocalStorage } from './localStorage';
 
+const unAuth :User = {
+  id: 0,
+  email: '',
+}
+const userInfoFromStorage = getUserInfoFromLocalStorage();
+
+const userGlobalInfo = ref<User>(userInfoFromStorage ? JSON.parse(userInfoFromStorage) : unAuth);
+  const isReady = ref(false);
+
+
+onMounted(() => {
+  console.log('App Смонтировано!');
+  isReady.value = true;
+})
 provide('showLoginDialog', showLoginDialog);
 provide('showRegistrationDialog', showRegistrationDialog);
 provide('showAddNoteDialog', showAddNoteDialog);
+provide('userGlobalInfo', userGlobalInfo);
 </script>
 
 <template>
-  <HeaderComponent/>
+  <HeaderComponent v-if="isReady" />
   <div id="app-content">
-    <!-- <MainPage/> -->
-    <MyNotesPage/>
-    <!-- <NotesTestPage/> -->
+    <router-view/>
   </div>
-  <LoginDialog />
   <RegistrationDialog />
-  <AddNoteDialog />
+  <LoginDialog />
 </template>
 
 <style lang="css" scoped>

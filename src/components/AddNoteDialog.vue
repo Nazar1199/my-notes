@@ -17,7 +17,7 @@
             <MyTextArea 
                 id="note-text" 
                 :value="noteTextValue" 
-                @textarea="noteTextValue = $event"
+                @input="noteTextValue = $event"
                 :maxLenght="500"
                 label="Текст заметки" 
                 placeholder="Введите текст"/>
@@ -39,8 +39,11 @@
   <script setup>
   import { ref, inject } from "vue";
   import { createNote } from "../api/notes";
+  import { Note } from "../models/Note";
   import { getTokenFromLocalStorage } from "../localStorage";
   
+  const emit = defineEmits(['noteCreated']);
+
   const showAddNoteDialog = inject('showAddNoteDialog');
   const errorMessage = ref("");
   const noteNameValue = ref("");
@@ -48,11 +51,18 @@
   
   const addNewNote = async () => {
   try {
-    await createNote(
+    const createdNote = await createNote(
         getTokenFromLocalStorage(), 
         noteNameValue.value, 
         noteTextValue.value
     );
+    const newNote = {
+        id: createdNote.id,
+        title: noteNameValue.value,
+        content: noteTextValue.value,
+    };
+
+    emit('noteCreated', newNote);
     closeAddNoteDialog();
   } catch (error) {
     errorMessage.value = String(error.message);
@@ -66,7 +76,7 @@ const clearForm = () => {
   }
 
   const closeAddNoteDialog = () => {
-    showLoginDialog.value = false;
+    showAddNoteDialog.value = false;
     clearForm();
   };
   </script>

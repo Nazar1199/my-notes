@@ -1,36 +1,89 @@
 <template>
     <div class="notes-grid">
-      <div class="note-item" v-for="item in notes" :key="item">
-        <NoteItem :title="item.title" :text="item.text"/>
+      <div class="note-item" v-for="item in notes" :key="item.id">
+        <NoteItem 
+          :title="item.title" 
+          :text="item.content" 
+          :id="item.id" 
+          @remove="removeNote"/>
       </div>
     </div>
+    <div class="add-button-container">
+      <MyButton id="add-button" :iconName="$IconNames.Add" :onClick="openAddNoteDialog" />
+    </div>
+  <AddNoteDialog @noteCreated="addNote"/>
   </template>
   
   <script setup>
-  import { ref } from "vue";
+  import { ref, inject } from "vue";
   import NoteItem from "../components/NoteItem.vue";
-  
-  const notes = ref([
-    { title: "Заметка 1", text: "Текст заметки 1" },
-    { title: "Заметка 2", text: "Текст заметки 2" },
-    { title: "Заметка 3", text: "Текст заметки 3" },
-    { title: "Заметка 4", text: "Текст заметки 4" },
-    { title: "Заметка 5", text: "Текст заметки 5" },
-    { title: "Заметка 6", text: "Текст заметки 6" },
-    { title: "Заметка 7", text: "Текст заметки 7" },
-    { title: "Заметка 8", text: "Текст заметки 8" },
-  ]);
-  
-  const removeNote = (index) => {
-    notes.value.splice(index, 1);
+  import AddNoteDialog from "../components/AddNoteDialog.vue";
+  import { getNotes, deleteNote } from "../api/notes";
+  import { getTokenFromLocalStorage } from "../localStorage";
+  import { useRouter } from 'vue-router';
+
+  const showAddNoteDialog = inject('showAddNoteDialog');
+  const notes = ref([]);
+  const router = useRouter();
+
+  const getMyNotes = async () => {
+    try {
+      const accessToken = getTokenFromLocalStorage();
+      if (accessToken) {
+        const fetchedNotes = await getNotes(accessToken);
+        if (fetchedNotes) {
+          notes.value = fetchedNotes;
+        }
+      } else {
+        console.error('Access token not found');
+        const navigateToMain = () => {
+          router.push('/');
+        };
+        navigateToMain();
+      }
+    } catch (error) {
+      console.error(String(error.message));
+    }
+  }
+  getMyNotes();
+
+  const openAddNoteDialog = () => {
+    showAddNoteDialog.value = true;
   };
   
-  const addNote = () => {
-    notes.value.push({ title: "", text: "" });
+  const addNote = async (newNote) => {
+    notes.value.push(newNote);
+  };
+  
+  const removeNote = async (id) => {
+    try {
+      const accessToken = getTokenFromLocalStorage();
+      if (accessToken) {
+        await deleteNote(accessToken, id);
+        notes.value = notes.value.filter(note => note.id !== id);
+      } else {
+        console.error('Access token not found');
+        const navigateToMain = () => {
+          router.push('/');
+        };
+        navigateToMain();
+      }
+    } catch (error) {
+      console.error(String(error.message));
+    }
   };
   </script>
 
   <style lang="css" scoped>
+  
+  .add-button-container {
+    position: fixed;
+    bottom: 40px;
+    right: 8px;
+    #add-button {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
   .note-item {
     width: 100%;
   }
@@ -40,16 +93,24 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
   }
-
-  @media (max-width: 1366px) {
-    .notes-grid {
-      gap: 20px;
-    }
-  }
-
   @media (max-width: 768px) {
     .notes-grid {
       grid-template-columns: 1fr; 
     }
-}
+  }
+  @media (max-width: 1366px) {
+      .notes-grid {
+        gap: 20px;
+      }
+    }
+    @media (min-width: 1366px) {
+      .add-button-container {
+        right: 12px;
+      }
+  }
+    @media (min-width: 1900px) {
+      .add-button-container {
+        right: 40px;
+      }
+  }
 </style>

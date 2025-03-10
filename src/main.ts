@@ -1,10 +1,25 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import './style.css';
+import App from './App.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 import { IconNames, IconSizes } from './components/UI/icons';
 import {MyButton, MyInputBox, MyDialog, MyTextArea} from "./components/UI/AllMyComponentsPack";
+import MainPage from './pages/MainPage.vue';
+import MyNotesPage from './pages/MyNotesPage.vue';
+
+const routes = [
+  { path: '/', component: MainPage },
+  { path: '/notes', component: MyNotesPage },
+];
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+  });
+
 
 const app = createApp(App)
+app.use(router);
 
 app.component("MyButton", MyButton)
 app.component("MyInputBox", MyInputBox)

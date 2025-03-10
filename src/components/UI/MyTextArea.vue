@@ -4,7 +4,7 @@
       <span class="label">{{localLabel}}</span>
     </div>
     <div class="textarea-container">
-      <textarea :placeholder=localPlaceholder :value="localValue" @textarea="updateValue"></textarea>
+      <textarea :placeholder=localPlaceholder :value="localValue" @input="updateValue"></textarea>
     </div>
     <div v-if="localShowErrors == true || localMaxLenght != 0" class="subtext-container">
       <span class="error-message">{{ localErrorMessage }}</span>
@@ -25,7 +25,7 @@ const props = defineProps({
   showErrors: Boolean,
 });
 
-const emit = defineEmits(["textarea"]);
+const emit = defineEmits(["input"]);
 
 const localLabel = ref(props.label || "Поле ввода");
 const localErrorMessage = ref("");
@@ -56,7 +56,7 @@ watch(
 );
 const updateValue = (event) => {
   localValue.value = event.target.value;
-  emit("textarea", event.target.value);
+  emit("input", event.target.value);
 };
 </script>
 

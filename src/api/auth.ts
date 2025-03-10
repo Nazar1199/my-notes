@@ -1,6 +1,11 @@
 import {AxiosError} from 'axios';
 import { api } from '.';
-import { saveTokenToLocalStorage, removeTokenFromLocalStorage } from '../localStorage';
+import { 
+  saveTokenToLocalStorage, 
+  removeTokenFromLocalStorage,
+  saveUserInfoToLocalStorage,
+  removeUserInfoFromLocalStorage
+} from '../localStorage';
 
 export async function loginUser(email: string, password: string) {
     try {
@@ -8,8 +13,8 @@ export async function loginUser(email: string, password: string) {
         email,
         password,
       });
-      saveTokenToLocalStorage(response.data);
-      // console.log('Login successful:', response.data);
+      saveTokenToLocalStorage(response.data.accessToken);
+      console.log('Login successful:', response.data);
     } catch (error) {
         if (error instanceof AxiosError) {
           console.error('Login failed:', error.response?.data || error.message);
@@ -28,6 +33,7 @@ export async function loginUser(email: string, password: string) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    saveUserInfoToLocalStorage(JSON.stringify(response.data));
     console.log('User info:', response.data);
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -46,6 +52,7 @@ export async function logoutUser(accessToken: string) {
       },
     });
     removeTokenFromLocalStorage();
+    removeUserInfoFromLocalStorage();
     console.log('Logout successful');
   } catch (error) {
     if (error instanceof AxiosError) {

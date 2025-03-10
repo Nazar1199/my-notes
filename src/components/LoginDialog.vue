@@ -38,42 +38,69 @@
     </MyDialog>
   </template>
   
-  <script setup>
-  import { ref, inject } from "vue";
-  import { loginUser } from "../api/auth";
+  <script setup lang="ts">
+import { ref, inject, watch } from 'vue';
+import { loginUser, getUserInfo } from '../api/auth';
+import { useRouter } from 'vue-router';
+import { getTokenFromLocalStorage, getUserInfoFromLocalStorage } from '../localStorage';
+import type { User } from '../models/User';
 
-  const showLoginDialog = inject('showLoginDialog');
-  const showRegistrationDialog = inject('showRegistrationDialog');
-  const errorMessage = ref("");
-  const loginValue = ref("");
-  const passwordValue = ref("");
-  
-  const login = async () => {
+const userGlobalInfo = inject('userGlobalInfo');
+console.log('LoginDialog: userGlobalInfo injected with:', userGlobalInfo);
+
+const showLoginDialog = ref(inject('showLoginDialog'));
+const showRegistrationDialog = inject('showRegistrationDialog');
+const errorMessage = ref('');
+const loginValue = ref('');
+const passwordValue = ref('');
+const router = useRouter();
+
+const navigateToNotes = () => router.push('/notes');
+
+watch(showLoginDialog, (newValue) => {
+  if (newValue) {
+    console.log('Value is available:', newValue);
+  }
+});
+
+const login = async () => {
   try {
     await loginUser(loginValue.value, passwordValue.value);
-    errorMessage.value = "";
+    await getUserInfo(getTokenFromLocalStorage());
+    // setuserGlobalInfo(loginValue.value);
+    errorMessage.value = '';
     closeLoginDialog();
+    navigateToNotes();
   } catch (error) {
     errorMessage.value = String(error.message);
   }
 };
 
-  const clearForm = () => {
-    errorMessage.value = "";
-    loginValue.value = "";
-    passwordValue.value = "";
-  }
+const clearForm = () => {
+  errorMessage.value = '';
+  loginValue.value = '';
+  passwordValue.value = '';
+};
 
-    const openRegistrationDialog = () => {
-    showRegistrationDialog.value = true;
-    closeLoginDialog();
-    };
+const openRegistrationDialog = () => {
+  showRegistrationDialog.value = true;
+  closeLoginDialog();
+};
 
-  const closeLoginDialog = () => {
-    showLoginDialog.value = false;
+const setuserGlobalInfo = (logginedUser: User) => {
+    console.log("set new login user");
+    console.log(logginedUser);
+    console.log("to");
+    console.log(userGlobalInfo);
+    userGlobalInfo.value = logginedUser;
     clearForm();
-  };
-  </script>
+};
+
+const closeLoginDialog = () => {
+  showLoginDialog.value = false;
+  clearForm();
+};
+</script>
 
 <style lang="scss" scoped>
     #errors-text {

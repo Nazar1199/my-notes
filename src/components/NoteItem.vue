@@ -16,25 +16,21 @@
   import { ref, watch } from "vue";
   
   const props = defineProps({
+    id: Number,
     title: String,
     text: String,
   });
   
-  const emit = defineEmits(["remove", "update:title", "update:text"]);
+  const emit = defineEmits(["remove"]);
   
+  const localId = ref(props.id || 0);
   const localTitle = ref(props.title || "");
   const localText = ref(props.text || "");
-  
-  watch(localTitle, (newValue) => {
-    emit("update:title", newValue);
-  });
-  
-  watch(localText, (newValue) => {
-    emit("update:text", newValue);
-  });
-  
+    
   const removeNote = () => {
-    emit("remove");
+    console.log("Delete clicked at");
+    console.log(localId.value);
+    emit("remove", localId.value);
   };
   </script>
   
@@ -43,7 +39,6 @@
     background-color: #0A1F38;
   }
   .note {
-    position:relative;
     overflow: hidden;
     display: block;
     width: 100%;
@@ -60,6 +55,7 @@
         margin-bottom: 20px;
         margin-top: 20px;
         margin-left: 28px;
+        margin-right: 28px;
       }
     }
     .note:before {

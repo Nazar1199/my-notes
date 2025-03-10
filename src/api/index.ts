@@ -24,8 +24,10 @@ export async function registerUser(email: string, password: string, confirmPassw
   } catch (error) {
     if (error instanceof AxiosError) {
         console.error('Registration failed:', error.response?.data || error.message);
+        throw error.response?.data || error.message;
     } else {
         console.error('Registration failed:', (error as Error).message || error);
+        throw (error as Error).message || error;
     }
   }
 }
