@@ -3,12 +3,13 @@ import { ref, provide, onMounted } from 'vue';
 import HeaderComponent from './components/HeaderComponent.vue'
 import LoginDialog from './components/LoginDialog.vue';
 import RegistrationDialog from './components/RegistrationDialog.vue';
+import { User } from './models/User';
+import { getUserInfoFromLocalStorage } from './localStorage';
+import { useUserGlobalInfoStore } from "./store";
 
 const showLoginDialog = ref(false);
 const showRegistrationDialog = ref(false);
 const showAddNoteDialog = ref(false);
-import { User } from './models/User';
-import { getUserInfoFromLocalStorage } from './localStorage';
 
 const unAuth :User = {
   id: 0,
@@ -21,8 +22,9 @@ const userGlobalInfo = ref<User>(userInfoFromStorage ? JSON.parse(userInfoFromSt
 
 
 onMounted(() => {
-  console.log('App Смонтировано!');
   isReady.value = true;
+  const userGlobalInfo = useUserGlobalInfoStore();
+  userGlobalInfo.syncUserWithLocalStorage();
 })
 provide('showLoginDialog', showLoginDialog);
 provide('showRegistrationDialog', showRegistrationDialog);

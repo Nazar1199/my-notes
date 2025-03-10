@@ -1,4 +1,5 @@
 <template>
+  <div class="notes">
     <div class="notes-grid">
       <div class="note-item" v-for="item in notes" :key="item.id">
         <NoteItem 
@@ -11,6 +12,7 @@
     <div class="add-button-container">
       <MyButton id="add-button" :iconName="$IconNames.Add" :onClick="openAddNoteDialog" />
     </div>
+  </div>
   <AddNoteDialog @noteCreated="addNote"/>
   </template>
   
@@ -75,7 +77,10 @@
   </script>
 
   <style lang="css" scoped>
-  
+  .notes {
+    /* width: 80vh;
+    height: 80vh; */
+  }
   .add-button-container {
     position: fixed;
     bottom: 40px;

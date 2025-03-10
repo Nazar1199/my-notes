@@ -42,8 +42,9 @@
 import { ref, inject, watch } from 'vue';
 import { loginUser, getUserInfo } from '../api/auth';
 import { useRouter } from 'vue-router';
-import { getTokenFromLocalStorage, getUserInfoFromLocalStorage } from '../localStorage';
+import { getTokenFromLocalStorage } from '../localStorage';
 import type { User } from '../models/User';
+import { useUserGlobalInfoStore } from '../store';
 
 const userGlobalInfo = inject('userGlobalInfo');
 console.log('LoginDialog: userGlobalInfo injected with:', userGlobalInfo);
@@ -67,7 +68,7 @@ const login = async () => {
   try {
     await loginUser(loginValue.value, passwordValue.value);
     await getUserInfo(getTokenFromLocalStorage());
-    // setuserGlobalInfo(loginValue.value);
+    setUserGlobalInfo(loginValue.value);
     errorMessage.value = '';
     closeLoginDialog();
     navigateToNotes();
@@ -87,12 +88,9 @@ const openRegistrationDialog = () => {
   closeLoginDialog();
 };
 
-const setuserGlobalInfo = (logginedUser: User) => {
-    console.log("set new login user");
-    console.log(logginedUser);
-    console.log("to");
-    console.log(userGlobalInfo);
-    userGlobalInfo.value = logginedUser;
+const setUserGlobalInfo = (logginedUser: User) => {
+    const userGlobalInfo = useUserGlobalInfoStore();
+    userGlobalInfo.setUser(logginedUser)
     clearForm();
 };
 

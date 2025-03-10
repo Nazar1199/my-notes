@@ -6,6 +6,10 @@ import { IconNames, IconSizes } from './components/UI/icons';
 import {MyButton, MyInputBox, MyDialog, MyTextArea} from "./components/UI/AllMyComponentsPack";
 import MainPage from './pages/MainPage.vue';
 import MyNotesPage from './pages/MyNotesPage.vue';
+import { createPinia } from 'pinia';
+
+const pinia = createPinia();
+
 
 const routes = [
   { path: '/', component: MainPage },
@@ -20,6 +24,7 @@ const router = createRouter({
 
 const app = createApp(App)
 app.use(router);
+app.use(pinia)
 
 app.component("MyButton", MyButton)
 app.component("MyInputBox", MyInputBox)

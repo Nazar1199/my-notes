@@ -4,8 +4,8 @@
       <div class="logo">
         <img src="/public/resources/icons/logo.svg" alt="Логотип" />
       </div>
-      <div id="user-info" v-if="userIsNotNull()">
-        <p class="text-small">{{ userGlobalInfo.email }}</p>
+      <div id="user-info" v-if="useUserGlobalInfoStore().isLoggedIn">
+        <p class="text-small">{{ useUserGlobalInfoStore().email }}</p>
         <MyButton
           class="button" id="user-avatar"
           :onClick="toggleTooltip"
@@ -16,7 +16,7 @@
           <a @click="logout">Выйти</a>
         </div>
       </div>
-      <MyButton v-if="!userIsNotNull()"
+      <MyButton v-if="!useUserGlobalInfoStore().isLoggedIn"
         class="button"
         :onClick="openLoginDialog"
         :iconName="$IconNames.Login"
@@ -28,11 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, provide, onMounted } from 'vue';
-import { getTokenFromLocalStorage, getUserInfoFromLocalStorage, removeTokenFromLocalStorage, removeUserInfoFromLocalStorage } from '../localStorage';
+import { inject, ref, onMounted } from 'vue';
+import { getTokenFromLocalStorage, removeTokenFromLocalStorage, removeUserInfoFromLocalStorage } from '../localStorage';
 import { logoutUser } from '../api/auth';
 import { useRouter } from 'vue-router';
 import type { User } from '../models/User';
+import { useUserGlobalInfoStore } from '../store';
 
 const unAuth :User = {
   id: 0,
@@ -55,7 +56,9 @@ const logout = async () => {
       await logoutUser(accessToken);
       removeTokenFromLocalStorage();
       removeUserInfoFromLocalStorage();
+      useUserGlobalInfoStore().clearUser();
       userGlobalInfo.value = unAuth;
+      showTooltip.value = false;
       navigateToMain();
     } else {
       console.error('Access token not found');
