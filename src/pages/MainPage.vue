@@ -19,9 +19,10 @@ import { getTokenFromLocalStorage } from "../localStorage";
 import { useRouter } from 'vue-router';
 const router = useRouter();
 import { onMounted } from 'vue';
+import { useUserGlobalInfoStore } from '../store';
 
 onMounted(() => {
-  const token = getTokenFromLocalStorage();
+  const token = useUserGlobalInfoStore().isLoggedIn;
     if (token != "" && token != null) {
         console.log(true);
         const navigateToNotes = () => {
