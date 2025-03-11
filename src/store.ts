@@ -25,26 +25,26 @@ export const useUserGlobalInfoStore = defineStore('userGlobalInfo', {
       this.isAuthenticated = false;
     },
     syncUserWithLocalStorage() {
-      // console.log("syncUserWithLocalStorage started");
-      // try {
-      //     const userString = localStorage.getItem('userLogin');
-      //     console.log(userString?.toString);
-      //     if (!userString) {
-      //         console.log("No userLogin in localStorage");
-      //         return;
-      //     }
-      //     const localStorageUser = JSON.parse(userString);
-      //     if (localStorageUser && typeof localStorageUser.email === 'string') {
-      //         this.id = localStorageUser.id;
-      //         this.email = localStorageUser.email;
-      //         this.isAuthenticated = true;
-      //         console.log("User successfully synced from localStorage");
-      //     } else {
-      //         console.error("Invalid user data structure");
-      //     }
-      // } catch (error) {
-      //     console.error("Error parsing user data from localStorage:", error);
-      // }
+      console.log("syncUserWithLocalStorage started");
+      try {
+          const userString = localStorage.getItem('userLogin');
+          console.log(userString?.toString);
+          if (!userString) {
+              console.log("No userLogin in localStorage");
+              return;
+          }
+          const localStorageUser = JSON.parse(userString);
+          if (localStorageUser && typeof localStorageUser.email === 'string') {
+              this.id = localStorageUser.id;
+              this.email = localStorageUser.email;
+              this.isAuthenticated = true;
+              console.log("User successfully synced from localStorage");
+          } else {
+              console.error("Invalid user data structure");
+          }
+      } catch (error) {
+          console.error("Error parsing user data from localStorage:", error);
+      }
   }
   },
   getters: {
