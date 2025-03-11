@@ -22,14 +22,6 @@ export const useUserGlobalInfoStore = defineStore('userGlobalInfo', {
       }
     },
     setEmail(newEmail: string){
-      console.log("STORE");
-      console.log("Setting email to:", newEmail, typeof newEmail);
-      if (typeof newEmail === 'string') {
-        console.log("all info correct");
-        this.email = newEmail;
-      } else {
-        console.error("setEmail: newEmail is not a string", newEmail);
-      }
       this.email = newEmail;
     },
     login(){
@@ -44,12 +36,9 @@ export const useUserGlobalInfoStore = defineStore('userGlobalInfo', {
       this.isAuthenticated = false;
     },
     syncUserWithLocalStorage() {
-      console.log("syncUserWithLocalStorage started");
       try {
           const userString = localStorage.getItem('userLogin');
-          console.log(userString?.toString);
           if (!userString) {
-              console.log("No userLogin in localStorage");
               return;
           }
           const localStorageUser = JSON.parse(userString);
@@ -57,9 +46,7 @@ export const useUserGlobalInfoStore = defineStore('userGlobalInfo', {
               this.id = localStorageUser.id;
               this.email = localStorageUser.email;
               this.isAuthenticated = true;
-              console.log("User successfully synced from localStorage");
           } else {
-              console.error("Invalid user data structure");
           }
       } catch (error) {
           console.error("Error parsing user data from localStorage:", error);
