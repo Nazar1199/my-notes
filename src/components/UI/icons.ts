@@ -14,7 +14,7 @@ export enum IconSizes {
     Large = "large",
 }
 
-const iconsPath: string  = "/public/resources/icons/";
+const iconsPath: string  = "/src/assets/icons/";
 const iconsFormat: string  = ".svg";
 
 export default class MyUiIcons {

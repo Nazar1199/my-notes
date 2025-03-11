@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="right-side">
-        <img src="/public/resources/pictures/main-page-picture.svg" alt="Main Page Picture" />
+        <img src="/src/assets/pictures/main-page-picture.svg" alt="Main Page Picture" />
       </div>
     </div>
   </template>

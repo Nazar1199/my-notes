@@ -2,7 +2,7 @@
   <header class="header">
     <div id="header-content">
       <div class="logo">
-        <img src="/public/resources/icons/logo.svg" alt="Логотип" />
+        <img src="/src/assets/icons/logo.svg" alt="Логотип" />
       </div>
       <div id="user-info" v-if="useUserGlobalInfoStore().isLoggedIn">
         <p class="text-small">{{ useUserGlobalInfoStore().userEmail }}</p>
