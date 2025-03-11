@@ -24,7 +24,7 @@ const userGlobalInfo = ref<User>(userInfoFromStorage ? JSON.parse(userInfoFromSt
 onMounted(() => {
   isReady.value = true;
   const userGlobalInfo = useUserGlobalInfoStore();
-  // userGlobalInfo.syncUserWithLocalStorage();
+  userGlobalInfo.syncUserWithLocalStorage();
 })
 provide('showLoginDialog', showLoginDialog);
 provide('showRegistrationDialog', showRegistrationDialog);

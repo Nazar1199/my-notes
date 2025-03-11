@@ -42,7 +42,7 @@
 import { ref, inject, watch } from 'vue';
 import { loginUser, getUserInfo } from '../api/auth';
 import { useRouter } from 'vue-router';
-import { getTokenFromLocalStorage } from '../localStorage';
+import { getTokenFromLocalStorage, getUserInfoFromLocalStorage } from '../localStorage';
 import type { User } from '../models/User';
 import { useUserGlobalInfoStore } from '../store';
 
@@ -88,9 +88,12 @@ const openRegistrationDialog = () => {
   closeLoginDialog();
 };
 
-const setUserGlobalInfo = (logginedUser: User) => {
-    const userGlobalInfo = useUserGlobalInfoStore();
-    userGlobalInfo.setUser(logginedUser)
+const setUserGlobalInfo = (logginedUserEmail: string) => {
+    try {
+    useUserGlobalInfoStore().login()
+    useUserGlobalInfoStore().setEmail(logginedUserEmail)
+    // userGlobalInfo.setId(logginedUser.id)
+    } catch { }
     clearForm();
 };
 
